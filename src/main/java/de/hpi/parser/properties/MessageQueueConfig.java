@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class MessageQueueConfig {
 
     @Bean
-    public Queue priceValidatorQueue(SimpleRabbitListenerContainerFactory factory, MessageConverter messageConverter,
+    public Queue crawledPages(SimpleRabbitListenerContainerFactory factory, MessageConverter messageConverter,
                                      RabbitMQProperties properties) {
         factory.setMessageConverter(messageConverter);
         return new Queue(properties.getQueueName(), true, false, false);
