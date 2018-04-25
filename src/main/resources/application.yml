@@ -9,3 +9,15 @@ spring:
         username: ${MONGO_BRIDGE_USER}
         password: ${MONGO_BRIDGE_PW}
         database: data
+  rabbitmq:
+    port: ${RABBIT_PORT}
+    addresses: ${RABBIT_IP}
+    username: ${RABBIT_USER}
+    password: ${RABBIT_PASSWORD}
+
+logging:
+  level:
+    org.springframework.web: ERROR
+    de.deeps: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36}: %msg%n"
