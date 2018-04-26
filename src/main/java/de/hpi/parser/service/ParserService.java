@@ -11,9 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Getter(AccessLevel.PRIVATE)
 @Setter(AccessLevel.PRIVATE)
@@ -34,11 +32,24 @@ public class ParserService implements IParserService {
         getParsedOfferRepository().save(parsedOffer);
     }
 
-    private Map<OfferAttribute, String> extractData(EnumMap<OfferAttribute, Set<Selector>> selectorMap, Document
-            page) {
+    private Map<OfferAttribute, String> extractData(EnumMap<OfferAttribute, Set<Selector>> selectorMap, Document page) {
         Map<OfferAttribute, String> extractedData = new EnumMap<>(OfferAttribute.class);
-        selectorMap.forEach((offerAttribute, selectors) -> extractedData.put(offerAttribute, selectors.isEmpty() ? null : DataExtractor.extract(page, selectors
-                .iterator().next())));
+        selectorMap.forEach((offerAttribute, selectors) -> extractedData.put(offerAttribute, getBestMatchFor
+                (selectors, page)));
         return extractedData;
     }
+
+    private String getBestMatchFor(Set<Selector> selectors, Document page) {
+        HashMap<String, Double> scores = new HashMap<>();
+        selectors.forEach(selector ->
+                updateScoreMap(scores, DataExtractor.extract(page, selector), selector.getNormalizedScore()));
+        Optional<Map.Entry<String, Double>> optional = scores.entrySet().stream().max(Map.Entry.comparingByValue());
+        return optional.isPresent() ? optional.get().getKey() : "";
+    }
+
+    private void updateScoreMap(HashMap<String, Double> scores, String content, double normalizedScore) {
+        double prevScore = scores.getOrDefault(content, 0.0);
+        scores.put(content, prevScore + normalizedScore);
+    }
+
 }

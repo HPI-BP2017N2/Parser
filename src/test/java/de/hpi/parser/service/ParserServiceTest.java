@@ -18,6 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -85,5 +86,28 @@ public class ParserServiceTest {
         doAnswer(answer).when(getParsedOfferRepository()).save(any());
         getParserService().extractData(new CrawledPage(null, 1234L, getPageExample().html(),"google.de"));
 
+    }
+
+    @Test
+    public void successfulExtractDataWithScore() {
+        EnumMap<OfferAttribute, Set<Selector>> selectorMap = new EnumMap<>(OfferAttribute.class);
+        TextNodeSelector selectorA = new TextNodeSelector("#testProduct > span:nth-child(2)");
+        selectorA.setNormalizedScore(0.9);
+        TextNodeSelector selectorB = new TextNodeSelector("#testProduct > span:nth-child(4)");
+        selectorB.setNormalizedScore(0.5);
+        AttributeNodeSelector selectorC = new AttributeNodeSelector("#babushka > span:nth-child(1)[itemprop]","itemprop");
+        selectorC.setNormalizedScore(0.5);
+        Set<Selector> selectors = new HashSet<>(Arrays.asList(selectorA, selectorB, selectorC));
+        selectorMap.put(OfferAttribute.EAN, selectors);
+        ShopRules rules = new ShopRules(selectorMap, 1234L);
+        doReturn(rules).when(getShopRulesGenerator()).getRules(anyLong());
+
+        Answer<ParsedOffer> answer = invocationOnMock -> {
+            ParsedOffer parsedOffer = invocationOnMock.getArgument(0);
+            assertEquals("890890", parsedOffer.getEan());
+            return parsedOffer;
+        };
+        doAnswer(answer).when(getParsedOfferRepository()).save(any());
+        getParserService().extractData(new CrawledPage(null, 1234L, getPageExample().html(),"google.de"));
     }
 }
