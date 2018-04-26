@@ -43,7 +43,7 @@ public class ParserService implements IParserService {
         HashMap<String, Double> scores = new HashMap<>();
         selectors.forEach(selector ->
                 updateScoreMap(scores, DataExtractor.extract(page, selector), selector.getNormalizedScore()));
-        Optional<Map.Entry<String, Double>> optional = scores.entrySet().stream().min(Map.Entry.comparingByValue());
+        Optional<Map.Entry<String, Double>> optional = scores.entrySet().stream().max(Map.Entry.comparingByValue());
         return optional.isPresent() ? optional.get().getKey() : "";
     }
 
