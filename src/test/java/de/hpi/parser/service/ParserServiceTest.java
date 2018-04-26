@@ -79,7 +79,7 @@ public class ParserServiceTest {
 
         Answer<ParsedOffer> answer = invocationOnMock -> {
             ParsedOffer parsedOffer = invocationOnMock.getArgument(0);
-            assertNull(parsedOffer.getEan());
+            assertEquals("", parsedOffer.getEan());
             return parsedOffer;
         };
         doAnswer(answer).when(getParsedOfferRepository()).save(any());
