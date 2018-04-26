@@ -1,0 +1,25 @@
+spring:
+  data:
+      mongodb:
+        host: ${MONGO_IP}
+        port: ${MONGO_PORT}
+        username: ${MONGO_BRIDGE_USER}
+        password: ${MONGO_BRIDGE_PW}
+        database: data
+  rabbitmq:
+    port: ${RABBIT_PORT}
+    addresses: ${RABBIT_IP}
+    username: ${RABBIT_USER}
+    password: ${RABBIT_PW}
+    queue-name: "crawledPages"
+
+parser-settings:
+  get-rules-route: "/getRules/"
+  shop-rules-generator-root: "ts1552.byod.hpi.de:1981"
+
+logging:
+  level:
+    org.springframework.web: ERROR
+    de.deeps: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36}: %msg%n"
