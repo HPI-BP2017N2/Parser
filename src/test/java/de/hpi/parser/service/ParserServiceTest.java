@@ -2,7 +2,7 @@ package de.hpi.parser.service;
 
 import de.hpi.parser.dto.CrawledPage;
 import de.hpi.parser.persistence.ParsedOffer;
-import de.hpi.parser.persistence.ParsedOfferRepository;
+import de.hpi.parser.persistence.IParsedOfferRepository;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,6 @@ import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class ParserServiceTest {
     private ShopRulesGenerator shopRulesGenerator;
 
     @Mock
-    private ParsedOfferRepository parsedOfferRepository;
+    private IParsedOfferRepository parsedOfferRepository;
 
     @InjectMocks
     private ParserService parserService;

@@ -2,7 +2,7 @@ package de.hpi.parser.service;
 
 import de.hpi.parser.dto.CrawledPage;
 import de.hpi.parser.persistence.ParsedOffer;
-import de.hpi.parser.persistence.ParsedOfferRepository;
+import de.hpi.parser.persistence.IParsedOfferRepository;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ParserService implements IParserService {
 
-    private final ParsedOfferRepository parsedOfferRepository;
+    private final IParsedOfferRepository parsedOfferRepository;
 
     private final ShopRulesGenerator shopRulesGenerator;
 
