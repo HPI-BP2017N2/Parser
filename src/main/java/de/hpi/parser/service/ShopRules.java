@@ -1,9 +1,9 @@
 package de.hpi.parser.service;
 
-import lombok.*;
-
-import java.util.EnumMap;
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @ToString
@@ -11,6 +11,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class ShopRules {
 
-    private EnumMap<OfferAttribute, Set<Selector>> selectors;
+    private SelectorMap selectorMap;
     private long shopID;
 }

@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
@@ -23,7 +22,7 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
@@ -52,7 +51,7 @@ public class ParserServiceTest {
 
     @Test
     public void successfulExtractData() {
-        EnumMap<OfferAttribute, Set<Selector>> selectorMap = new EnumMap<>(OfferAttribute.class);
+        SelectorMap selectorMap = new SelectorMap();
         Set<Selector> selectors = new HashSet<>();
         selectors.add(new TextNodeSelector("#testProduct > span:nth-child(2)"));
         selectorMap.put(OfferAttribute.EAN, selectors);
@@ -71,7 +70,7 @@ public class ParserServiceTest {
 
     @Test
     public void unsuccessfulExtractData() {
-        EnumMap<OfferAttribute, Set<Selector>> selectorMap = new EnumMap<>(OfferAttribute.class);
+        SelectorMap selectorMap = new SelectorMap();
         Set<Selector> selectors = new HashSet<>();
         selectors.add(new TextNodeSelector("#testProduct > span:nth-child(6)"));
         selectorMap.put(OfferAttribute.EAN, selectors);
@@ -90,7 +89,7 @@ public class ParserServiceTest {
 
     @Test
     public void successfulExtractDataWithScore() {
-        EnumMap<OfferAttribute, Set<Selector>> selectorMap = new EnumMap<>(OfferAttribute.class);
+        SelectorMap selectorMap = new SelectorMap();
         TextNodeSelector selectorA = new TextNodeSelector("#testProduct > span:nth-child(2)");
         selectorA.setNormalizedScore(0.9);
         TextNodeSelector selectorB = new TextNodeSelector("#testProduct > span:nth-child(4)");

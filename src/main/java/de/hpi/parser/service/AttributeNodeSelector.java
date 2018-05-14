@@ -1,19 +1,23 @@
 package de.hpi.parser.service;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 class AttributeNodeSelector extends Selector {
 
     private String attributeName;
 
-    AttributeNodeSelector(String cssSelector, String attributeName) {
+    @JsonCreator
+    AttributeNodeSelector(@JsonProperty(value = "cssSelector") String cssSelector, @JsonProperty(value =
+            "attributeName") String
+            attributeName){
         super(NodeType.ATTRIBUTE_NODE, cssSelector);
         setAttributeName(attributeName);
     }
+
 }

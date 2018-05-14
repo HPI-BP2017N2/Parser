@@ -1,32 +1,48 @@
 package de.hpi.parser.service;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = AttributeNodeSelector.class, name = "attributeNodeSelector"),
+        @JsonSubTypes.Type(value = DataNodeSelector.class, name = "dataNodeSelector"),
+        @JsonSubTypes.Type(value = TextNodeSelector.class, name = "textNodeSelector")
+})
 abstract class Selector {
 
     public enum NodeType {
+        ATTRIBUTE_NODE,
+        DATA_NODE,
         TEXT_NODE,
-        ATTRIBUTE_NODE
     }
 
     private double normalizedScore;
 
     private int score;
 
-    private final NodeType nodeType;
+    private int leftCutIndex;
 
-    private final String cssSelector;
+    private int rightCutIndex;
 
-    void incrementScore() {
-        setScore(getScore() + 1);
-    }
+    private NodeType nodeType;
 
-    void decrementScore() {
-        setScore(getScore() - 1);
+    private String cssSelector;
+
+    @JsonCreator
+    Selector(@JsonProperty(value = "nodeType") NodeType nodeType, @JsonProperty(value = "cssSelector") String
+            cssSelector) {
+        setNodeType(nodeType);
+        setCssSelector(cssSelector);
     }
 }
