@@ -24,8 +24,8 @@ public class ShopRulesGenerator {
     private final RestTemplate restTemplate;
 
     @Retryable(
-            value = { HttpClientErrorException.class },
-            backoff = @Backoff(delay = 75000))
+            value = { HttpClientErrorException.class},
+            backoff = @Backoff(delay = 100000, value = 5))
     ShopRules getRules(long shopID) {
         return getRestTemplate().getForObject(getRulesURI(shopID), SuccessGetRulesResponse.class).getData();
     }
