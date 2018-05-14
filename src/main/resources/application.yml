@@ -15,7 +15,7 @@ spring:
 
 parser-settings:
   get-rules-route: "/getRules/"
-  shop-rules-generator-root: "ts1552.byod.hpi.de:1981"
+  shop-rules-generator-root: "http://ts1552.byod.hpi.de:1981"
 
 logging:
   level:

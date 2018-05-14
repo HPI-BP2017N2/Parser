@@ -9,15 +9,16 @@ import java.util.Date;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class CrawledPage {
 
-    private final Date fetchedDate;
+    private Date fetchedDate;
 
-    private final long shopID;
+    private long shopId;
 
-    private final String content;
+    private String content;
 
-    private final String url;
+    private String url;
 
 }

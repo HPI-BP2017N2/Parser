@@ -63,6 +63,6 @@ public class ParsedOffer {
         setDescription(extractedData.get(DESCRIPTION));
         setBrandName(extractedData.get(BRAND));
         setCategory(extractedData.get(CATEGORY));
-        setShopID(page.getShopID());
+        setShopID(page.getShopId());
     }
 }

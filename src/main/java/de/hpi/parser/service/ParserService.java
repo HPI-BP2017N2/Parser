@@ -25,7 +25,7 @@ public class ParserService implements IParserService {
 
     @Override
     public void extractData(CrawledPage crawledPage) {
-        ShopRules rules = getShopRulesGenerator().getRules(crawledPage.getShopID());
+        ShopRules rules = getShopRulesGenerator().getRules(crawledPage.getShopId());
         Map<OfferAttribute, String> extractedData = extractData(rules.getSelectors(), Jsoup.parse(crawledPage
                 .getContent()));
         ParsedOffer parsedOffer = new ParsedOffer(extractedData, crawledPage);

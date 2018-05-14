@@ -21,7 +21,7 @@ public class CrawledPagesConsumer {
 
     @RabbitListener(queues = "#{@crawledPages}")
     public void onMessage(CrawledPage crawledPage) {
-        log.info("Received crawled page: " + crawledPage);
+        log.info("Received crawled page from shop " + crawledPage.getShopId() + " with url " + crawledPage.getUrl());
         getParserService().extractData(crawledPage);
     }
 }
