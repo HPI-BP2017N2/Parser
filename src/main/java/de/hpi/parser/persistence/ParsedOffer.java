@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import de.hpi.parser.dto.CrawledPage;
 import de.hpi.parser.service.OfferAttribute;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -17,7 +18,7 @@ import static de.hpi.parser.service.OfferAttribute.*;
 
 @Document
 @Getter
-@Setter
+@Setter(AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ParsedOffer {
 

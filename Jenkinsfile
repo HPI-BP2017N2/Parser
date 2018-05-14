@@ -15,7 +15,7 @@ pipeline {
          }
          stage('Test') {
                      steps {
-                         sh 'mvn test'
+                         sh 'mvn test -P travis'
                      }
                  }
          stage('Publish') {
