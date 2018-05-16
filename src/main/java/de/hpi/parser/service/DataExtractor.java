@@ -53,13 +53,23 @@ class DataExtractor {
         Script block = new Script(elements.get(0).html());
         try {
             for (PathID id : selector.getPathToBlock()) {
+                if (id != selector.getPathToBlock().getFirst()) block = removeOuterBrackets(block);
                 block = block.getBlock(id.getId());
             }
-        } catch (BlockNotFoundException ignored) { /* ignore this exception */}
+        } catch (BlockNotFoundException ignored) { /* ignore this exception */ }
         try {
             return JsonPath.parse(block.getContent()).read(selector.getJsonPath());
         } catch (PathNotFoundException e) {
             return "";
         }
     }
+
+    private static Script removeOuterBrackets(Script block) {
+        String content = block.getContent();
+        int firstBracketIndex = content.indexOf('{') + 1;
+        int lastBracketIndex = content.lastIndexOf('}');
+        return (firstBracketIndex > 0 && lastBracketIndex != -1) ? new Script(content.substring(firstBracketIndex,
+                lastBracketIndex)) : block;
+    }
+
 }

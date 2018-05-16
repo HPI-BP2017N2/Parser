@@ -108,4 +108,24 @@ public class ParserServiceTest {
         doAnswer(answer).when(getParsedOfferRepository()).save(any());
         getParserService().extractData(new CrawledPage(null, 1234L, getPageExample().html(),"google.de"));
     }
+
+    @Test
+    public void testSuccessfulDataExtraction() {
+        SelectorMap selectorMap = new SelectorMap();
+        Set<Selector> selectors = new HashSet<>();
+        Path pathToBlock = new Path();
+        pathToBlock.add(new PathID(0));
+        selectors.add(new DataNodeSelector("head > script", pathToBlock, "$.products[1].blums"));
+        selectorMap.put(OfferAttribute.EAN, selectors);
+        ShopRules rules = new ShopRules(selectorMap, 1234L);
+        doReturn(rules).when(getShopRulesGenerator()).getRules(anyLong());
+
+        Answer<ParsedOffer> answer = invocationOnMock -> {
+            ParsedOffer parsedOffer = invocationOnMock.getArgument(0);
+            assertEquals("456", parsedOffer.getEan());
+            return parsedOffer;
+        };
+        doAnswer(answer).when(getParsedOfferRepository()).save(any());
+        getParserService().extractData(new CrawledPage(null, 1234L, getPageExample().html(),"google.de"));
+    }
 }
