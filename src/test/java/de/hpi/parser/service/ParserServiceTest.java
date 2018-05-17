@@ -128,4 +128,44 @@ public class ParserServiceTest {
         doAnswer(answer).when(getParsedOfferRepository()).save(any());
         getParserService().extractData(new CrawledPage(null, 1234L, getPageExample().html(),"google.de"));
     }
+
+    @Test
+    public void testUseEANGenericRulesOverSelectors() {
+        SelectorMap selectorMap = new SelectorMap();
+        Set<Selector> selectors = new HashSet<>();
+        selectors.add(new TextNodeSelector("#iDontWantToFindThis"));
+        selectorMap.put(OfferAttribute.EAN, selectors);
+        ShopRules rules = new ShopRules(selectorMap, 1234L);
+        doReturn(rules).when(getShopRulesGenerator()).getRules(anyLong());
+
+        Answer<ParsedOffer> answer = invocationOnMock -> {
+            ParsedOffer parsedOffer = invocationOnMock.getArgument(0);
+            assertEquals("8717868161157", parsedOffer.getEan());
+            return parsedOffer;
+        };
+        doAnswer(answer).when(getParsedOfferRepository()).save(any());
+        getParserService().extractData(new CrawledPage(null, 1234L, getPageExample().html(),"google.de"));
+    }
+
+
+
+    @Test
+    public void testUseSelectorsIfMultipleEan() throws IOException {
+        Document doc = Jsoup.parse(getClass().getClassLoader().getResourceAsStream("PageExample2.html"), "UTF-8", "");
+
+        SelectorMap selectorMap = new SelectorMap();
+        Set<Selector> selectors = new HashSet<>();
+        selectors.add(new TextNodeSelector("#iDontWantoFindThis"));
+        selectorMap.put(OfferAttribute.EAN, selectors);
+        ShopRules rules = new ShopRules(selectorMap, 1234L);
+        doReturn(rules).when(getShopRulesGenerator()).getRules(anyLong());
+
+        Answer<ParsedOffer> answer = invocationOnMock -> {
+            ParsedOffer parsedOffer = invocationOnMock.getArgument(0);
+            assertEquals("8717868149537", parsedOffer.getEan());
+            return parsedOffer;
+        };
+        doAnswer(answer).when(getParsedOfferRepository()).save(any());
+        getParserService().extractData(new CrawledPage(null, 1234L, doc.html(),"google.de"));
+    }
 }
