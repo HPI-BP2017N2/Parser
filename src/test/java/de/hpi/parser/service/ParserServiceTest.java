@@ -130,7 +130,9 @@ public class ParserServiceTest {
     }
 
     @Test
-    public void testUseEANGenericRulesOverSelectors() {
+    public void testUseEANGenericRulesOverSelectors() throws IOException {
+        Document doc = Jsoup.parse(getClass().getClassLoader().getResourceAsStream("PageExample3.html"), "UTF-8", "");
+
         SelectorMap selectorMap = new SelectorMap();
         Set<Selector> selectors = new HashSet<>();
         selectors.add(new TextNodeSelector("#iDontWantToFindThis"));
@@ -144,7 +146,7 @@ public class ParserServiceTest {
             return parsedOffer;
         };
         doAnswer(answer).when(getParsedOfferRepository()).save(any());
-        getParserService().extractData(new CrawledPage(null, 1234L, getPageExample().html(),"google.de"));
+        getParserService().extractData(new CrawledPage(null, 1234L, doc.html(),"google.de"));
     }
 
 
