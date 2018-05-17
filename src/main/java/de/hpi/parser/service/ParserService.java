@@ -37,8 +37,16 @@ public class ParserService implements IParserService {
 
     private Map<OfferAttribute, String> extractData(EnumMap<OfferAttribute, Set<Selector>> selectorMap, Document page) {
         Map<OfferAttribute, String> extractedData = new EnumMap<>(OfferAttribute.class);
-        selectorMap.forEach((offerAttribute, selectors) -> extractedData.put(offerAttribute, getBestMatchFor
-                (selectors, page)));
+        selectorMap.forEach((offerAttribute, selectors) -> {
+            if (OfferAttribute.EAN.equals(offerAttribute)) {
+                Optional<String> ean = EANExtractor.extract(page);
+                if (ean.isPresent()) {
+                    extractedData.put(OfferAttribute.EAN, ean.get());
+                    return;
+                }
+            }
+            extractedData.put(offerAttribute, getBestMatchFor(selectors, page));
+        });
         return extractedData;
     }
 
