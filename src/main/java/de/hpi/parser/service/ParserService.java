@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static de.hpi.parser.service.Normalizer.normalizeData;
+
 @Getter(AccessLevel.PRIVATE)
 @Setter(AccessLevel.PRIVATE)
 @Service
@@ -28,6 +30,7 @@ public class ParserService implements IParserService {
         ShopRules rules = getShopRulesGenerator().getRules(crawledPage.getShopId());
         Map<OfferAttribute, String> extractedData = extractData(rules.getSelectorMap(), Jsoup.parse(crawledPage
                 .getContent()));
+        normalizeData(extractedData);
         ParsedOffer parsedOffer = new ParsedOffer(extractedData, crawledPage);
         getParsedOfferRepository().save(parsedOffer);
     }
