@@ -5,6 +5,7 @@ import de.hpi.parser.properties.ParserSettings;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,8 @@ public class ShopRulesGenerator {
     @Retryable(
             value = { HttpClientErrorException.class},
             backoff = @Backoff(delay = 100000, value = 5))
-    ShopRules getRules(long shopID) {
+    @Cacheable("rules")
+    public ShopRules getRules(long shopID) {
         return getRestTemplate().getForObject(getRulesURI(shopID), SuccessGetRulesResponse.class).getData();
     }
 
