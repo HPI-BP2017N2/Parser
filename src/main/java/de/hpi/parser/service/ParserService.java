@@ -7,9 +7,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.*;
 
@@ -19,6 +21,7 @@ import static de.hpi.parser.service.Normalizer.normalizeData;
 @Setter(AccessLevel.PRIVATE)
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ParserService implements IParserService {
 
     private final IParsedOfferRepository parsedOfferRepository;
@@ -27,12 +30,17 @@ public class ParserService implements IParserService {
 
     @Override
     public void extractData(CrawledPage crawledPage) {
-        ShopRules rules = getShopRulesGenerator().getRules(crawledPage.getShopId());
-        Map<OfferAttribute, String> extractedData = extractData(rules.getSelectorMap(), Jsoup.parse(crawledPage
-                .getContent()));
-        normalizeData(extractedData);
-        ParsedOffer parsedOffer = new ParsedOffer(extractedData, crawledPage);
-        getParsedOfferRepository().save(parsedOffer);
+        try {
+            ShopRules rules = getShopRulesGenerator().getRules(crawledPage.getShopId());
+            Map<OfferAttribute, String> extractedData = extractData(rules.getSelectorMap(), Jsoup.parse(crawledPage
+                    .getContent()));
+            normalizeData(extractedData);
+            ParsedOffer parsedOffer = new ParsedOffer(extractedData, crawledPage);
+            getParsedOfferRepository().save(parsedOffer);
+        } catch (HttpClientErrorException e) {
+            log.error("Skip crawled page: " + crawledPage.getUrl() + " of shop " + crawledPage.getShopId(), e);
+        }
+
     }
 
     private Map<OfferAttribute, String> extractData(EnumMap<OfferAttribute, Set<Selector>> selectorMap, Document page) {
