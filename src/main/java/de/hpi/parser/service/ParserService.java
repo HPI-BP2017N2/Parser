@@ -10,9 +10,11 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 import static de.hpi.parser.service.Normalizer.normalizeData;
 
@@ -28,13 +30,15 @@ public class ParserService implements IParserService {
     private final ShopRulesGenerator shopRulesGenerator;
 
     @Override
-    public void extractData(CrawledPage crawledPage) {
+    @Async("queueThreadPoolTaskExecutor")
+    public CompletableFuture<ParsedOffer> extractData(CrawledPage crawledPage) {
         ShopRules rules = getShopRulesGenerator().getRules(crawledPage.getShopId());
         Map<OfferAttribute, String> extractedData = extractData(rules.getSelectorMap(), Jsoup.parse(crawledPage
                 .getContent()));
         normalizeData(extractedData);
         ParsedOffer parsedOffer = new ParsedOffer(extractedData, crawledPage);
         getParsedOfferRepository().save(parsedOffer);
+        return CompletableFuture.completedFuture(parsedOffer);
     }
 
     private Map<OfferAttribute, String> extractData(EnumMap<OfferAttribute, Set<Selector>> selectorMap, Document page) {
