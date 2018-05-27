@@ -1,7 +1,7 @@
 package de.hpi.parser.service;
 
 import de.hpi.parser.dto.SuccessGetRulesResponse;
-import de.hpi.parser.properties.ParserSettings;
+import de.hpi.parser.properties.ParserConfig;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class ShopRulesGenerator {
 
-    private final ParserSettings config;
+    private final ParserConfig config;
 
     private final RestTemplate restTemplate;
 
