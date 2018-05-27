@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("parser-settings")
 @Getter
 @Setter
-public class ParserSettings {
+public class ParserConfig {
 
     private String shopRulesGeneratorRoot;
 

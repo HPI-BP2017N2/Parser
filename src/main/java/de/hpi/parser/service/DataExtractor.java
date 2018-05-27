@@ -1,5 +1,6 @@
 package de.hpi.parser.service;
 
+import com.jayway.jsonpath.InvalidJsonException;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import de.hpi.parser.exception.BlockNotFoundException;
@@ -56,10 +57,16 @@ class DataExtractor {
                 if (id != selector.getPathToBlock().getFirst()) block = removeOuterBrackets(block);
                 block = block.getBlock(id.getId());
             }
-        } catch (BlockNotFoundException ignored) { /* ignore this exception */ }
+            return extract(block, selector);
+        } catch (BlockNotFoundException ignored) {
+            return "";
+        }
+    }
+
+    private static String extract(Script block, DataNodeSelector selector) {
         try {
             return JsonPath.parse(block.getContent()).read(selector.getJsonPath());
-        } catch (PathNotFoundException e) {
+        } catch (InvalidJsonException | PathNotFoundException ignored) {
             return "";
         }
     }

@@ -1,7 +1,7 @@
 package de.hpi.parser.service;
 
 import de.hpi.parser.dto.SuccessGetRulesResponse;
-import de.hpi.parser.properties.ParserSettings;
+import de.hpi.parser.properties.ParserConfig;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,14 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class ShopRulesGenerator {
 
-    private final ParserSettings config;
+    private final ParserConfig config;
 
     private final RestTemplate restTemplate;
 
     @Retryable(
             value = { HttpClientErrorException.class},
-            backoff = @Backoff(delay = 100000, value = 5))
+            maxAttempts = 5,
+            backoff = @Backoff(delay = 300000))
     @Cacheable("rules")
     public ShopRules getRules(long shopID) {
         return getRestTemplate().getForObject(getRulesURI(shopID), SuccessGetRulesResponse.class).getData();
