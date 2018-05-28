@@ -115,6 +115,7 @@ public class ParserServiceTest {
         Set<Selector> selectors = new HashSet<>();
         Path pathToBlock = new Path();
         pathToBlock.add(new PathID(0));
+        pathToBlock.add(new PathID(0));
         selectors.add(new DataNodeSelector("head > script", pathToBlock, "$.products[1].blums"));
         selectorMap.put(OfferAttribute.EAN, selectors);
         ShopRules rules = new ShopRules(selectorMap, 1234L);
