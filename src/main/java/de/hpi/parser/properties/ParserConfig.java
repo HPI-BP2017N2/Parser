@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 @Setter
 public class ParserConfig {
 
+    private long waitIfThreadCapacityReachedInMilliseconds;
+
     private String shopRulesGeneratorRoot;
 
     private String getRulesRoute;
