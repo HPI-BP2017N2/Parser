@@ -7,6 +7,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.Min;
+
 @Component
 @EnableConfigurationProperties
 @EnableRetry
@@ -20,5 +22,14 @@ public class ParserConfig {
     private String shopRulesGeneratorRoot;
 
     private String getRulesRoute;
+
+    @Min(1)
+    private int corePoolSize;
+
+    @Min(1)
+    private int maxPoolSize;
+
+    @Min(1)
+    private int queueCapacity;
 
 }

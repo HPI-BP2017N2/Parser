@@ -12,11 +12,11 @@ import java.util.concurrent.Executor;
 public class AsyncConfig {
 
     @Bean(name = "queueThreadPoolTaskExecutor")
-    public Executor queueThreadPoolTaskExecutor() {
+    public Executor queueThreadPoolTaskExecutor(ParserConfig config) {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(4);
-        executor.setMaxPoolSize(100);
-        executor.setQueueCapacity(20);
+        executor.setCorePoolSize(config.getCorePoolSize());
+        executor.setMaxPoolSize(config.getMaxPoolSize());
+        executor.setQueueCapacity(config.getQueueCapacity());
         executor.setThreadNamePrefix("Queue-Threadpool-");
         executor.initialize();
         return executor;
