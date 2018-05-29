@@ -17,6 +17,9 @@ parser-settings:
   get-rules-route: "/getRules/"
   shop-rules-generator-root: "http://ts1552.byod.hpi.de:1981"
   waitIfThreadCapacityReachedInMilliseconds: 600000
+  corePoolSize: 2
+  maxPoolSize: 5
+  queueCapacity: 20
 
 logging:
   level:
