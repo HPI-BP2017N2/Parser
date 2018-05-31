@@ -16,6 +16,9 @@ and collection named after shopID).
 2. RabbitMQ
 <br />The Parser consumes HTML pages from a RabbitMQ.
 
+3. ShopRulesGenerator
+The Parser requests shop specific rules from the SRG and uses them to extract data from crawled pages.
+
 ### Configuration
 
 #### Environment variables
