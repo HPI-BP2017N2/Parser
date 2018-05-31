@@ -29,6 +29,10 @@ public class ParserService implements IParserService {
 
     private final ShopRulesGenerator shopRulesGenerator;
 
+    /**
+     * Extract product specific attributes using the shop specific rules from the crawled pages.
+     * @param crawledPage The webpage that we want to extract product attributes from.
+     */
     @Override
     @Async("queueThreadPoolTaskExecutor")
     public void extractData(CrawledPage crawledPage) {

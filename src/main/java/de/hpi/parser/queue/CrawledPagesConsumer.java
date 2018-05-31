@@ -23,6 +23,11 @@ public class CrawledPagesConsumer {
 
     private final ParserConfig config;
 
+    /**
+     * Recieves messages fro RabbitMQ and passes these to the {@link de.hpi.parser.service.ParserService}.
+     * @param crawledPage Fetched HTML-page from the Crawler.
+     * @throws InterruptedException Might get thrown if component get shut down.
+     */
     @RabbitListener(queues = "#{@crawledPages}")
     public void onMessage(CrawledPage crawledPage) throws InterruptedException {
         log.info("Received crawled page from shop " + crawledPage.getShopId() + " with url " + crawledPage.getUrl());
