@@ -40,7 +40,6 @@ public class ParserService implements IParserService {
             ShopRules rules = getShopRulesGenerator().getRules(crawledPage.getShopId());
             Map<OfferAttribute, String> extractedData = extractData(rules.getSelectorMap(), Jsoup.parse(crawledPage
                     .getContent()));
-            normalizeData(extractedData);
             ParsedOffer parsedOffer = new ParsedOffer(extractedData, crawledPage);
             getParsedOfferRepository().save(parsedOffer);
         } catch (HttpClientErrorException e) {
@@ -60,15 +59,17 @@ public class ParserService implements IParserService {
                     return;
                 }
             }
-            extractedData.put(offerAttribute, getBestMatchFor(selectors, page));
+            extractedData.put(offerAttribute, getBestMatchFor(selectors, page, offerAttribute));
         });
         return extractedData;
     }
 
-    private String getBestMatchFor(Set<Selector> selectors, Document page) {
+    private String getBestMatchFor(Set<Selector> selectors, Document page, OfferAttribute offerAttribute) {
         HashMap<String, Double> scores = new HashMap<>();
         selectors.forEach(selector ->
-                updateScoreMap(scores, DataExtractor.extract(page, selector), selector.getNormalizedScore()));
+                updateScoreMap(scores,
+                        normalizeData(DataExtractor.extract(page, selector), offerAttribute),
+                        selector.getNormalizedScore()));
         Optional<Map.Entry<String, Double>> optional = scores.entrySet().stream()
                 .filter(entry -> entry.getKey().replace(" ", "").length() > 0)
                 .max(Map.Entry.comparingByValue());
