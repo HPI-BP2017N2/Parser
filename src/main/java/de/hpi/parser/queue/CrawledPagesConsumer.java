@@ -36,6 +36,7 @@ public class CrawledPagesConsumer {
         } catch (TaskRejectedException e) {
             log.info("Thread pool has no free capacity.", e);
             Thread.sleep(getConfig().getWaitIfThreadCapacityReachedInMilliseconds());
+            throw e;
         }
     }
 }
